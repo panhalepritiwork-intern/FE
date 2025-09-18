@@ -5,10 +5,21 @@ type Props = {
 };
 
 const TaskItem: React.FC<Props> = ({ task }) => {
+  const getStatusClass = (status: string) => {
+    switch (status) {
+      case "completed":
+        return "status completed";
+      case "in-progress":
+        return "status in-progress";
+      default:
+        return "status pending";
+    }
+  };
+
   return (
-    <div style={{ border: "1px solid #ccc", margin: "5px", padding: "10px", borderRadius: "6px" }}>
+    <div className="task-card">
       <h3>{task.title}</h3>
-      <p>Status: {task.status}</p>
+      <p className={getStatusClass(task.status)}>Status: {task.status}</p>
     </div>
   );
 };
