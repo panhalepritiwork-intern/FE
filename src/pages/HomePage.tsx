@@ -1,36 +1,55 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import TaskItem from "../components/TaskItem";
 import { Task } from "../types/task";
+import { getTasks, createTask, updateTask, deleteTask } from "../services/taskService";
+
+const DUMMY_USER_ID = "68ca441e8d7de7643abd7e01"; 
 
 const HomePage: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([
-    { _id: "1", title: "Learn TypeScript", status: "pending", user: "123" },
-    { _id: "2", title: "Setup Boilerplate", status: "completed", user: "123" },
-  ]);
-
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
 
-  const handleAddTask = () => {
+  //fetch from backend
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const fetchTasks = async () => {
+    try {
+      const data = await getTasks();
+      setTasks(data);
+    } catch (err) {
+      console.error("Error fetching tasks:", err);
+    }
+  };
+
+  const handleAddTask = async () => {
     if (!newTask.trim()) return;
-    const task: Task = {
-      _id: Date.now().toString(),
-      title: newTask,
-      status: "pending",
-      user: "123",
-    };
-    setTasks([...tasks, task]);
-    setNewTask("");
+    try {
+      const task = await createTask(newTask, DUMMY_USER_ID);
+      setTasks([...tasks, task]);
+      setNewTask("");
+    } catch (err) {
+      console.error("Error creating task:", err);
+    }
   };
 
-  const handleUpdate = (id: string, status: string) => {
-    const updatedTasks = tasks.map((task) =>
-      task._id === id ? { ...task, status } : task
-    );
-    setTasks(updatedTasks);
+  const handleUpdate = async (id: string, status: string) => {
+    try {
+      const updated = await updateTask(id, status);
+      setTasks(tasks.map((t) => (t._id === id ? updated : t)));
+    } catch (err) {
+      console.error("Error updating task:", err);
+    }
   };
 
-  const handleDelete = (id: string) => {
-    setTasks(tasks.filter((task) => task._id !== id));
+  const handleDelete = async (id: string) => {
+    try {
+      await deleteTask(id);
+      setTasks(tasks.filter((t) => t._id !== id));
+    } catch (err) {
+      console.error("Error deleting task:", err);
+    }
   };
 
   return (
