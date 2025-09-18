@@ -22,6 +22,17 @@ const HomePage: React.FC = () => {
     setNewTask("");
   };
 
+  const handleUpdate = (id: string, status: string) => {
+    const updatedTasks = tasks.map((task) =>
+      task._id === id ? { ...task, status } : task
+    );
+    setTasks(updatedTasks);
+  };
+
+  const handleDelete = (id: string) => {
+    setTasks(tasks.filter((task) => task._id !== id));
+  };
+
   return (
     <div className="container">
       <h1>Home Page</h1>
@@ -42,9 +53,12 @@ const HomePage: React.FC = () => {
       </form>
 
       {tasks.map((task) => (
-        <div key={task._id} className="task-item">
-          <TaskItem task={task} />
-        </div>
+        <TaskItem
+          key={task._id}
+          task={task}
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
       ))}
     </div>
   );
