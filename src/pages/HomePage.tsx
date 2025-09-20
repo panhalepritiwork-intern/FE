@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import TaskItem from "../components/TaskItem";
 import { Task } from "../types/task";
-import { getTasks, createTask, updateTask, deleteTask } from "../services/taskService";
+import {
+  getTasks,
+  createTask,
+  updateTask,
+  deleteTask,
+} from "../services/taskService";
 
-const DUMMY_USER_ID = "68ca441e8d7de7643abd7e01"; 
+const DUMMY_USER_ID = "68ca441e8d7de7643abd7e01";
 
 const HomePage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
 
-  //fetch from backend
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -54,8 +58,9 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="container">
-      <h1>Home Page</h1>
+      <h1>Track Your Progress</h1>
 
+      {/* Add Task Form */}
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -71,14 +76,22 @@ const HomePage: React.FC = () => {
         <button type="submit">Add Task</button>
       </form>
 
-      {tasks.map((task) => (
-        <TaskItem
-          key={task._id}
-          task={task}
-          onUpdate={handleUpdate}
-          onDelete={handleDelete}
-        />
-      ))}
+      {/*Empty State */}
+      {tasks.length === 0 ? (
+        <div className="empty">
+          <span>📋</span>
+          <p>Your task list is empty. Add a task to get started.</p>
+        </div>
+      ) : (
+        tasks.map((task) => (
+          <TaskItem
+            key={task._id}
+            task={task}
+            onUpdate={handleUpdate}
+            onDelete={handleDelete}
+          />
+        ))
+      )}
     </div>
   );
 };
