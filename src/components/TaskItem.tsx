@@ -7,26 +7,34 @@ type Props = {
 };
 
 const TaskItem: React.FC<Props> = ({ task, onUpdate, onDelete }) => {
-  const getStatusClass = (status: string) => {
-    switch (status) {
-      case "completed":
-        return "status completed";
-      case "in-progress":
-        return "status in-progress";
-      default:
-        return "status pending";
-    }
-  };
-
   return (
     <div className="task-card">
-      <h3>{task.title}</h3>
-      <p className={getStatusClass(task.status)}>Status: {task.status}</p>
+      {/*Left side: Task info*/}
+      <div>
+        <h3>{task.title}</h3>
+        <p className={`status ${task.status}`}>Status: {task.status}</p>
+      </div>
 
-      <div style={{ marginTop: "10px" }}>
-        <button onClick={() => onUpdate(task._id, "in-progress")}>In Progress</button>
-        <button onClick={() => onUpdate(task._id, "completed")}>Complete</button>
-        <button onClick={() => onDelete(task._id)}>Delete</button>
+      {/*Right side: Action buttons*/}
+      <div className="actions">
+        <button
+          className="in-progress"
+          onClick={() => onUpdate(task._id, "in-progress")}
+        >
+          In Progress
+        </button>
+        <button
+          className="complete"
+          onClick={() => onUpdate(task._id, "completed")}
+        >
+          Complete
+        </button>
+        <button
+          className="delete"
+          onClick={() => onDelete(task._id)}
+        >
+          Delete
+        </button>
       </div>
     </div>
   );
