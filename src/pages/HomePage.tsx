@@ -13,6 +13,7 @@ const DUMMY_USER_ID = "68ca441e8d7de7643abd7e01";
 const HomePage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
+  const [filter, setFilter] = useState<"all" | "pending" | "in-progress" | "completed">("all");
 
   useEffect(() => {
     fetchTasks();
@@ -56,6 +57,10 @@ const HomePage: React.FC = () => {
     }
   };
 
+  //Progress calculation
+  const completedCount = tasks.filter((t) => t.status === "completed").length;
+  const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
+
   return (
     <div className="container">
       <h1>Track Your Progress</h1>
@@ -76,21 +81,61 @@ const HomePage: React.FC = () => {
         <button type="submit">Add Task</button>
       </form>
 
-      {/*Empty State */}
+      {/* Progress Bar */}
+      <div style={{ margin: "20px 0" }}>
+        <p>
+          Completed: {completedCount}/{tasks.length}
+        </p>
+        <div
+          style={{
+            background: "#e0e0e0",
+            borderRadius: "8px",
+            overflow: "hidden",
+            height: "12px",
+          }}
+        >
+          <div
+            style={{
+              width: `${progress}%`,
+              background: "#28a745",
+              height: "100%",
+              transition: "width 0.3s ease",
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Task Filter */}
+      <div style={{ marginBottom: "15px", textAlign: "right" }}>
+        <select
+          value={filter}
+          onChange={(e) => setFilter(e.target.value as any)}
+          style={{ padding: "6px", borderRadius: "6px" }}
+        >
+          <option value="all">All</option>
+          <option value="pending">Pending</option>
+          <option value="in-progress">In Progress</option>
+          <option value="completed">Completed</option>
+        </select>
+      </div>
+
+      {/* Empty State */}
       {tasks.length === 0 ? (
         <div className="empty">
-          <span>📋</span>
+          <span></span>
           <p>Your task list is empty. Add a task to get started.</p>
         </div>
       ) : (
-        tasks.map((task) => (
-          <TaskItem
-            key={task._id}
-            task={task}
-            onUpdate={handleUpdate}
-            onDelete={handleDelete}
-          />
-        ))
+        tasks
+          .filter((task) => filter === "all" || task.status === filter)
+          .map((task) => (
+            <TaskItem
+              key={task._id}
+              task={task}
+              onUpdate={handleUpdate}
+              onDelete={handleDelete}
+            />
+          ))
       )}
     </div>
   );
