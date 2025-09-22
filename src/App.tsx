@@ -1,10 +1,26 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { onAuthStateChanged, signOut, User } from "firebase/auth";
+import { auth } from "./firebase";
+
 import HomePage from "./pages/HomePage";
 import lightLogo from "./assets/logo-light.png";
 import darkLogo from "./assets/logo-dark.png";
 
+//Import Firebase Auth Components
+import SignUp from "./components/SignUp";
+import Login from "./components/Login";
+
 function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [user, setUser] = useState<User | null>(null);
+
+  //Track auth state
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+      setUser(currentUser);
+    });
+    return () => unsubscribe();
+  }, []);
 
   const toggleTheme = () => {
     setTheme(theme === "light" ? "dark" : "light");
@@ -33,23 +49,50 @@ function App() {
         </div>
 
         {/* Toggle Button */}
-        <button
-          onClick={toggleTheme}
-          style={{
-            padding: "6px 12px",
-            borderRadius: "6px",
-            border: "none",
-            cursor: "pointer",
-            fontWeight: "bold",
-            background: "#007bff",
-            color: "#fff",
-          }}
-        >
-          {theme === "light" ? "Dark Mode" : "Light Mode"}
-        </button>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          {user && (
+            <button
+              onClick={() => signOut(auth)}
+              style={{
+                padding: "6px 12px",
+                borderRadius: "6px",
+                border: "none",
+                cursor: "pointer",
+                fontWeight: "bold",
+                background: "red",
+                color: "#fff",
+              }}
+            >
+              Logout
+            </button>
+          )}
+
+          <button
+            onClick={toggleTheme}
+            style={{
+              padding: "6px 12px",
+              borderRadius: "6px",
+              border: "none",
+              cursor: "pointer",
+              fontWeight: "bold",
+              background: "#007bff",
+              color: "#fff",
+            }}
+          >
+            {theme === "light" ? "Dark Mode" : "Light Mode"}
+          </button>
+        </div>
       </header>
 
-      <HomePage />
+      {/* Main Content */}
+      {user ? (
+        <HomePage /> //Dashboard
+      ) : (
+        <div style={{ padding: "20px" }}>
+          <Login />
+          <SignUp />
+        </div>
+      )}
     </div>
   );
 }

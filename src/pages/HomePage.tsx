@@ -7,31 +7,39 @@ import {
   updateTask,
   deleteTask,
 } from "../services/taskService";
-
-const DUMMY_USER_ID = "68ca441e8d7de7643abd7e01";
+import { auth } from "../firebase";
 
 const HomePage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
   const [filter, setFilter] = useState<"all" | "pending" | "in-progress" | "completed">("all");
 
+  //Load tasks
   useEffect(() => {
     fetchTasks();
   }, []);
 
+  //Fetch
   const fetchTasks = async () => {
     try {
-      const data = await getTasks();
+      const token = await auth.currentUser?.getIdToken();
+      if (!token) return;
+
+      const data = await getTasks(token);
       setTasks(data);
     } catch (err) {
       console.error("Error fetching tasks:", err);
     }
   };
 
+  //Add
   const handleAddTask = async () => {
     if (!newTask.trim()) return;
     try {
-      const task = await createTask(newTask, DUMMY_USER_ID);
+      const token = await auth.currentUser?.getIdToken();
+      if (!token) return;
+
+      const task = await createTask(newTask, token);
       setTasks([...tasks, task]);
       setNewTask("");
     } catch (err) {
@@ -39,25 +47,33 @@ const HomePage: React.FC = () => {
     }
   };
 
+  //Update
   const handleUpdate = async (id: string, status: string) => {
     try {
-      const updated = await updateTask(id, status);
+      const token = await auth.currentUser?.getIdToken();
+      if (!token) return;
+
+      const updated = await updateTask(id, status, token);
       setTasks(tasks.map((t) => (t._id === id ? updated : t)));
     } catch (err) {
       console.error("Error updating task:", err);
     }
   };
 
+  //Delete
   const handleDelete = async (id: string) => {
     try {
-      await deleteTask(id);
+      const token = await auth.currentUser?.getIdToken();
+      if (!token) return;
+
+      await deleteTask(id, token);
       setTasks(tasks.filter((t) => t._id !== id));
     } catch (err) {
       console.error("Error deleting task:", err);
     }
   };
 
-  //Progress calculation
+  //Progress
   const completedCount = tasks.filter((t) => t.status === "completed").length;
   const progress = tasks.length > 0 ? (completedCount / tasks.length) * 100 : 0;
 
@@ -119,10 +135,9 @@ const HomePage: React.FC = () => {
         </select>
       </div>
 
-      {/* Empty State */}
+      {/*Empty State */}
       {tasks.length === 0 ? (
         <div className="empty">
-          <span></span>
           <p>Your task list is empty. Add a task to get started.</p>
         </div>
       ) : (
