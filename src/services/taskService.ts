@@ -1,27 +1,42 @@
 import axios from "axios";
 import { Task } from "../types/task";
 
-const API_URL = "http://localhost:5000/api/tasks"; 
+const API_URL = "http://localhost:5000/api/tasks";
 
-//fetch
-export const getTasks = async (): Promise<Task[]> => {
-  const res = await axios.get(API_URL);
+//Add token to headers
+const getAuthHeaders = (token: string) => ({
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
+//Fetch
+export const getTasks = async (token: string): Promise<Task[]> => {
+  const res = await axios.get(API_URL, getAuthHeaders(token));
   return res.data;
 };
 
-//create
-export const createTask = async (title: string, userId: string): Promise<Task> => {
-  const res = await axios.post(API_URL, { title, user: userId });
+//Create
+export const createTask = async (title: string, token: string): Promise<Task> => {
+  const res = await axios.post(
+    API_URL,
+    { title }, 
+    getAuthHeaders(token)
+  );
   return res.data;
 };
 
-//update
-export const updateTask = async (id: string, status: string): Promise<Task> => {
-  const res = await axios.put(`${API_URL}/${id}`, { status });
+//Update
+export const updateTask = async (id: string, status: string, token: string): Promise<Task> => {
+  const res = await axios.put(
+    `${API_URL}/${id}`,
+    { status },
+    getAuthHeaders(token)
+  );
   return res.data;
 };
 
-//delete
-export const deleteTask = async (id: string): Promise<void> => {
-  await axios.delete(`${API_URL}/${id}`);
+//Delete 
+export const deleteTask = async (id: string, token: string): Promise<void> => {
+  await axios.delete(`${API_URL}/${id}`, getAuthHeaders(token));
 };
