@@ -5,16 +5,14 @@ import { auth } from "./firebase";
 import HomePage from "./pages/HomePage";
 import lightLogo from "./assets/logo-light.png";
 import darkLogo from "./assets/logo-dark.png";
-
-//Import Firebase Auth Components
-import SignUp from "./components/SignUp";
-import Login from "./components/Login";
+import './index.css';
+import AuthPage from "./components/AuthPage";
 
 function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [user, setUser] = useState<User | null>(null);
 
-  //Track auth state
+  // Track auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -28,71 +26,45 @@ function App() {
 
   return (
     <div className={theme}>
-      {/* Header */}
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 20px",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-        }}
+      {/* Navbar */}
+      <nav
+        className={`navbar navbar-expand-lg shadow-sm ${
+          theme === "light" ? "navbar-light bg-light" : "navbar-dark bg-dark"
+        }`}
       >
-        {/* Logo + Title */}
-        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-          <img
-            src={theme === "light" ? lightLogo : darkLogo}
-            alt="Logo"
-            style={{ width: "50px", height: "50px", objectFit: "contain" }}
-          />
-          <h2 style={{ margin: 0 }}>Task Tracker</h2>
-        </div>
+        <div className="container-fluid">
+          <a className="navbar-brand d-flex align-items-center gap-2" href="#">
+            <img
+              src={theme === "light" ? lightLogo : darkLogo}
+              alt="Logo"
+              style={{ width: "40px", height: "40px", objectFit: "contain" }}
+            />
+            <span className="fw-bold">Task Tracker</span>
+          </a>
 
-        {/* Toggle Button */}
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          {user && (
+          <div className="d-flex align-items-center gap-2">
+            {user && (
+              <button
+                onClick={() => signOut(auth)}
+                className="btn btn-sm btn-danger"
+              >
+                Logout
+              </button>
+            )}
             <button
-              onClick={() => signOut(auth)}
-              style={{
-                padding: "6px 12px",
-                borderRadius: "6px",
-                border: "none",
-                cursor: "pointer",
-                fontWeight: "bold",
-                background: "red",
-                color: "#fff",
-              }}
+              onClick={toggleTheme}
+              className="btn btn-sm btn-outline-primary"
             >
-              Logout
+              {theme === "light" ? "Dark Mode" : "Light Mode"}
             </button>
-          )}
-
-          <button
-            onClick={toggleTheme}
-            style={{
-              padding: "6px 12px",
-              borderRadius: "6px",
-              border: "none",
-              cursor: "pointer",
-              fontWeight: "bold",
-              background: "#007bff",
-              color: "#fff",
-            }}
-          >
-            {theme === "light" ? "Dark Mode" : "Light Mode"}
-          </button>
+          </div>
         </div>
-      </header>
+      </nav>
 
-      {/* Main Content */}
-      {user ? (
-        <HomePage /> //Dashboard
-      ) : (
-        <div style={{ padding: "20px" }}>
-          <Login />
-          <SignUp />
-        </div>
-      )}
+      {/* Content */}
+      <div className="container mt-4">
+        {user ? <HomePage /> : <AuthPage />}
+      </div>
     </div>
   );
 }
