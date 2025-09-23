@@ -1,50 +1,50 @@
-import React, { useState } from "react";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { useState } from "react";
 import { auth } from "../firebase";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
-const Login: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [error, setError] = useState<string | null>(null);
+const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
-
     try {
-      //login
-      const userCred = await signInWithEmailAndPassword(auth, email, password);
-      console.log("User logged in:", userCred.user);
-      alert("Login successful!");
-    } catch (err: any) {
-      setError(err.message);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      console.log("Logged in:", userCredential.user);
+    } catch (error) {
+      console.error("Login error:", error);
     }
   };
 
   return (
     <form onSubmit={handleLogin}>
-      <h2>Login</h2>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      <div className="mb-3">
+        <label className="form-label">Email</label>
+        <input
+          type="email"
+          className="form-control"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        required
-      />
-      <br />
+      <div className="mb-3">
+        <label className="form-label">Password</label>
+        <input
+          type="password"
+          className="form-control"
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        required
-      />
-      <br />
-
-      <button type="submit">Login</button>
+      <button type="submit" className="btn btn-primary w-100">
+        Login
+      </button>
     </form>
   );
 };

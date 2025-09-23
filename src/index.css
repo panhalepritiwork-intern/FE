@@ -1,238 +1,27 @@
-html,
-body,
-#root {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    font-family: "Segoe UI", Arial, sans-serif;
-}
-
-
-/* Light Theme Styles */
-
-.light {
-    background: #f4f6f8;
-    color: #333;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.light .container {
-    background: #fff;
-    color: #333;
-}
-
-.light .task-card {
-    background: #fafafa;
-    border: 1px solid #e0e0e0;
-}
-
-.light header {
-    background: #007bff;
-    color: white;
-}
-
-
-/* Dark Theme Styles */
-
-.dark {
-    background: #121212;
-    color: #eee;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-}
-
-.dark .container {
-    background: #1e1e2f;
-    color: #eee;
-}
-
-.dark .task-card {
-    background: #2a2a3a;
-    border: 1px solid #333;
-}
-
-.dark header {
-    background: #1f1f2e;
-    color: #fff;
-}
-
-
-/*Styles (Both)*/
-
-
-/* Header */
-
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    font-size: 20px;
-    font-weight: bold;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-}
-
-
-/* Container */
-
-.container {
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 30px;
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-    flex: 1;
-}
-
-
-/* Page Title */
-
-h1 {
-    text-align: center;
-    font-size: 26px;
-    font-weight: 600;
-    margin-bottom: 25px;
-}
-
-
-/* Add Task Form */
-
-form {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 25px;
-}
-
-form input {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 15px;
-}
-
-form input:focus {
-    outline: none;
-    border-color: #007bff;
-    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
-}
-
-form button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: 8px;
-    background: #007bff;
-    color: white;
-    cursor: pointer;
-    font-weight: bold;
-    font-size: 15px;
-    transition: transform 0.2s ease, background 0.3s ease;
-}
-
-form button:hover {
-    background: #0056b3;
-    transform: translateY(-2px);
-}
-
-
-/* Task Card */
-
-.task-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    margin-bottom: 15px;
-    border-radius: 10px;
-    transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.task-card:hover {
-    transform: scale(1.01);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.task-card h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-
-/* Status Badge */
-
-.status {
-    font-size: 13px;
-    font-weight: bold;
-    padding: 4px 12px;
-    border-radius: 20px;
-    display: inline-block;
-    margin-top: 5px;
-}
-
-.status.pending {
-    background: #fff3cd;
-    color: #856404;
-}
-
-.status.in-progress {
-    background: #cce5ff;
-    color: #004085;
-}
-
-.status.completed {
-    background: #d4edda;
-    color: #155724;
-}
-
-
-/* Action Buttons */
-
-.task-card .actions button {
-    margin-right: 8px;
-    padding: 8px 14px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: bold;
-    transition: opacity 0.3s ease, transform 0.2s;
-}
-
-.task-card .actions button:hover {
-    opacity: 0.85;
-    transform: translateY(-1px);
-}
-
-.task-card .actions .in-progress {
-    background: #007bff;
-    color: #fff;
-}
-
-.task-card .actions .complete {
-    background: #28a745;
-    color: #fff;
-}
-
-.task-card .actions .delete {
-    background: #dc3545;
-    color: #fff;
-}
-
-
-/* Empty State */
-
-.empty {
-    text-align: center;
-    font-size: 16px;
-    margin-top: 20px;
-}
-
-.empty span {
-    font-size: 40px;
-    display: block;
-    margin-bottom: 8px;
-}
+    html,
+    body,
+    #root {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        font-family: "Segoe UI", Arial, sans-serif;
+    }
+    /* Light Theme */
+    
+    .light {
+        background: #f4f6f8;
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .light header {
+        background: #007bff;
+        color: white;
+    }
+    /* Dark Theme */
+    
+    .dark {
+        background: #121212;
+    }
