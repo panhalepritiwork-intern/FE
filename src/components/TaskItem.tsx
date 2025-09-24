@@ -9,10 +9,16 @@ type Props = {
 const TaskItem: React.FC<Props> = ({ task, onUpdate, onDelete }) => {
   return (
     <div className="card shadow-sm mb-3 border-0 task-card">
-      <div className="card-body d-flex justify-content-between align-items-center">
-        {/* Left side-- Task info */}
-        <div>
+      <div className="card-body d-flex justify-content-between align-items-start">
+       
+        <div className="me-3">
           <h6 className="card-title mb-1 fw-semibold">{task.title}</h6>
+
+      
+          {task.description && (
+            <p className="task-desc">{task.description}</p>
+          )}
+
           <span
             className={`badge px-3 py-2 text-capitalize ${
               task.status === "completed"
@@ -26,7 +32,7 @@ const TaskItem: React.FC<Props> = ({ task, onUpdate, onDelete }) => {
           </span>
         </div>
 
-        {/* Right side-- Action buttons */}
+        
         <div className="btn-group">
           <button
             className="btn btn-sm btn-outline-info"

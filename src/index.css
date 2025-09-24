@@ -6,7 +6,6 @@
         height: 100%;
         font-family: "Segoe UI", Arial, sans-serif;
     }
-    /* Light Theme */
     
     .light {
         background: #f4f6f8;
@@ -20,7 +19,6 @@
         background: #007bff;
         color: white;
     }
-    /* Dark Theme */
     
     .dark {
         background: #121212;
