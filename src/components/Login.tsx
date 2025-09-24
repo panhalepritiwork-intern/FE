@@ -10,9 +10,15 @@ const Login = () => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      if (!userCredential.user.emailVerified) {
+        alert("Please verify your email before logging in.");
+        return;
+      }
       console.log("Logged in:", userCredential.user);
+      alert("Login successful!");
     } catch (error) {
       console.error("Login error:", error);
+      alert("Login failed. Check your email and password.");
     }
   };
 
