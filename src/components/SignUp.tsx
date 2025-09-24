@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
+import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
 
 const SignUp = () => {
   const [name, setName] = useState("");
@@ -12,9 +12,15 @@ const SignUp = () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, { displayName: name });
+
+    
+      await sendEmailVerification(userCredential.user);
+      alert("Sign up successful! Please check your email for verification link.");
+
       console.log("Signed up:", userCredential.user);
     } catch (error) {
       console.error("Sign up error:", error);
+      alert("Sign up failed. Try again.");
     }
   };
 
