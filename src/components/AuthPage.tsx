@@ -14,7 +14,6 @@ const AuthPage = () => {
   const [taglineIndex, setTaglineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
 
-  // Typing animation
   useEffect(() => {
     if (charIndex < taglines[taglineIndex].length) {
       const timeout = setTimeout(() => {
@@ -35,10 +34,8 @@ const AuthPage = () => {
   return (
     <div className="auth-page">
       <div className="auth-card">
-        {/* Typing Tagline */}
         <p className="auth-tagline text-center">{displayText}</p>
 
-        {/* Tabs */}
         <div className="auth-tabs">
           <button
             className={isLogin ? "active" : ""}
@@ -54,7 +51,6 @@ const AuthPage = () => {
           </button>
         </div>
 
-        {/* Form */}
         <div className="auth-form">{isLogin ? <Login /> : <SignUp />}</div>
       </div>
     </div>

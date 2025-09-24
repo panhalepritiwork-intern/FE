@@ -7,6 +7,7 @@ import { auth } from "../firebase";
 const HomePage: React.FC = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [newTask, setNewTask] = useState("");
+  const [newDesc, setNewDesc] = useState(""); 
   const [filter, setFilter] = useState<"all" | "pending" | "in-progress" | "completed">("all");
 
   useEffect(() => {
@@ -29,9 +30,12 @@ const HomePage: React.FC = () => {
     try {
       const token = await auth.currentUser?.getIdToken();
       if (!token) return;
-      const task = await createTask(newTask, token);
+
+      const task = await createTask({ title: newTask, description: newDesc }, token);
+
       setTasks([...tasks, task]);
       setNewTask("");
+      setNewDesc(""); 
     } catch (err) {
       console.error("Error creating task:", err);
     }
@@ -64,10 +68,9 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="container py-4">
-      {/* Heading */}
+      
       <h1 className="task-title text-center mb-4">Track Your Progress</h1>
 
-      {/* Add Task Form */}
       <form
         className="row g-2 justify-content-center mb-4"
         onSubmit={(e) => {
@@ -78,20 +81,28 @@ const HomePage: React.FC = () => {
         <div className="col-md-8">
           <input
             type="text"
-            className="form-control"
-            placeholder="Enter new task"
+            className="form-control mb-2"
+            placeholder="e.g. Learn MongoDB basics, Finish React project..."
             value={newTask}
             onChange={(e) => setNewTask(e.target.value)}
+            required
+          />
+
+          <textarea
+            className="form-control"
+            placeholder="Add details or notes"
+            value={newDesc}
+            onChange={(e) => setNewDesc(e.target.value)}
           />
         </div>
+
         <div className="col-md-2">
           <button type="submit" className="btn btn-success w-100">
-            Add Task
+             Add Task
           </button>
         </div>
       </form>
 
-      {/* Progress Bar */}
       <div className="mb-4">
         <p className="fw-semibold">
           Completed: {completedCount}/{tasks.length}
@@ -108,7 +119,6 @@ const HomePage: React.FC = () => {
         </div>
       </div>
 
-      {/* Filter */}
       <div className="d-flex justify-content-end mb-3">
         <select
           className="form-select w-auto"
@@ -122,10 +132,9 @@ const HomePage: React.FC = () => {
         </select>
       </div>
 
-      {/* Tasks */}
       {tasks.length === 0 ? (
         <div className="text-center text-muted mt-5">
-          <span style={{ fontSize: "3rem" }}>📭</span>
+          <span style={{ fontSize: "3rem" }}></span>
           <p className="mt-2">Your task list is empty. Add a task to get started.</p>
         </div>
       ) : (

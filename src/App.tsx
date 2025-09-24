@@ -12,7 +12,6 @@ function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [user, setUser] = useState<User | null>(null);
 
-  // Track auth state
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
@@ -26,7 +25,6 @@ function App() {
 
   return (
     <div className={theme}>
-      {/* Navbar */}
       <nav
         className={`navbar navbar-expand-lg shadow-sm ${
           theme === "light" ? "navbar-light bg-light" : "navbar-dark bg-dark"
@@ -61,7 +59,6 @@ function App() {
         </div>
       </nav>
 
-      {/* Content */}
       <div className="container mt-4">
         {user ? <HomePage /> : <AuthPage />}
       </div>

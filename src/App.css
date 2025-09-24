@@ -7,9 +7,6 @@ body,
     font-family: "Segoe UI", Arial, sans-serif;
 }
 
-
-/* Light Theme */
-
 .light {
     background: #f4f6f8;
     color: #333;
@@ -18,8 +15,10 @@ body,
     flex-direction: column;
 }
 
-
-/* Dark Theme */
+.light header {
+    background: #007bff;
+    color: white;
+}
 
 .dark {
     background: #121212;
@@ -28,9 +27,6 @@ body,
     display: flex;
     flex-direction: column;
 }
-
-
-/* Navbar */
 
 .navbar {
     transition: background 0.3s ease;
@@ -47,12 +43,6 @@ body,
     box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
 }
 
-
-/* Task Tracker UI */
-
-
-/* Heading */
-
 .task-title {
     font-size: 2rem;
     font-weight: 700;
@@ -60,9 +50,6 @@ body,
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-
-
-/* Progress bar */
 
 .progress {
     background: #e0e0e0;
@@ -84,9 +71,6 @@ body,
     box-shadow: 0 0 12px rgba(0, 198, 255, 0.5);
 }
 
-
-/* Task Cards */
-
 .task-card {
     background: #fff;
     border-radius: 8px;
@@ -104,8 +88,18 @@ body,
     box-shadow: 0 8px 20px rgba(13, 110, 253, 0.3);
 }
 
+.task-card .task-desc {
+    font-size: 0.9rem;
+    color: #6c757d;
+    margin-bottom: 6px;
+    line-height: 1.4;
+    font-style: italic;
+}
 
-/* Badges */
+.dark .task-card .task-desc {
+    color: #bbb;
+    font-style: italic;
+}
 
 .badge {
     border-radius: 20px;
@@ -124,9 +118,6 @@ body,
 .dark .badge.bg-secondary {
     box-shadow: 0 0 8px rgba(108, 117, 125, 0.6);
 }
-
-
-/* Buttons  */
 
 .btn {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -150,10 +141,8 @@ body,
     box-shadow: 0 0 12px rgba(13, 110, 253, 0.7);
 }
 
-
-/* Inputs */
-
 .dark input,
+.dark textarea,
 .dark .form-select {
     background: #1e1e2f;
     border: 1px solid #333;
@@ -162,13 +151,16 @@ body,
 }
 
 .dark input:focus,
+.dark textarea:focus,
 .dark .form-select:focus {
     border-color: #0dcaf0;
     box-shadow: 0 0 8px rgba(13, 202, 240, 0.6);
 }
 
-
-/* Empty State */
+.dark input::placeholder,
+.dark textarea::placeholder {
+    color: #888;
+}
 
 .empty span {
     font-size: 3rem;
