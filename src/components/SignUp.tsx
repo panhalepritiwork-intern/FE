@@ -1,27 +1,33 @@
 import { useState } from "react";
 import { auth } from "../firebase";
-import { createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  sendEmailVerification,
+} from "firebase/auth";
+import { toast } from "react-toastify";
 
 const SignUp = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = async (e: React.FormEvent) => {
+  const handleSignUp = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, { displayName: name });
 
-    
-      await sendEmailVerification(userCredential.user);
-      alert("Sign up successful! Please check your email for verification link.");
-
-      console.log("Signed up:", userCredential.user);
-    } catch (error) {
-      console.error("Sign up error:", error);
-      alert("Sign up failed. Try again.");
-    }
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        toast.success("Account created for " + name);
+        sendEmailVerification(userCredential.user)
+          .then(() => {
+            toast.info("Verification email sent to " + email);
+          })
+          .catch((err) => {
+            toast.error("Error sending email: " + err.message);
+          });
+      })
+      .catch((err) => {
+        toast.error("Sign up failed: " + err.message);
+      });
   };
 
   return (
