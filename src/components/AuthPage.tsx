@@ -1,25 +1,29 @@
 import { useState, useEffect } from "react";
 import Login from "./Login";
 import SignUp from "./SignUp";
-import "../assets/auth.css"; 
+import PhoneAuth from "./PhoneAuth";
+import "../assets/auth.css";
 
 const taglines = [
   "✅ Because ticking tasks feels awesome!",
-  "🎯 Focus. Finish. Celebrate."
+  "🎯 Focus. Finish. Celebrate.",
+  "📱 Secure login with Phone OTP!"
 ];
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
+  const [activeTab, setActiveTab] = useState<"login" | "signup" | "phone">("login");
+
   const [displayText, setDisplayText] = useState("");
   const [taglineIndex, setTaglineIndex] = useState(0);
   const [charIndex, setCharIndex] = useState(0);
+
 
   useEffect(() => {
     if (charIndex < taglines[taglineIndex].length) {
       const timeout = setTimeout(() => {
         setDisplayText((prev) => prev + taglines[taglineIndex][charIndex]);
         setCharIndex(charIndex + 1);
-      }, 80); 
+      }, 80);
       return () => clearTimeout(timeout);
     } else {
       const timeout = setTimeout(() => {
@@ -38,20 +42,30 @@ const AuthPage = () => {
 
         <div className="auth-tabs">
           <button
-            className={isLogin ? "active" : ""}
-            onClick={() => setIsLogin(true)}
+            className={activeTab === "login" ? "active" : ""}
+            onClick={() => setActiveTab("login")}
           >
             Login
           </button>
           <button
-            className={!isLogin ? "active" : ""}
-            onClick={() => setIsLogin(false)}
+            className={activeTab === "signup" ? "active" : ""}
+            onClick={() => setActiveTab("signup")}
           >
             Sign Up
           </button>
+          <button
+            className={activeTab === "phone" ? "active" : ""}
+            onClick={() => setActiveTab("phone")}
+          >
+            Phone OTP
+          </button>
         </div>
 
-        <div className="auth-form">{isLogin ? <Login /> : <SignUp />}</div>
+        <div className="auth-form">
+          {activeTab === "login" && <Login />}
+          {activeTab === "signup" && <SignUp />}
+          {activeTab === "phone" && <PhoneAuth />}
+        </div>
       </div>
     </div>
   );

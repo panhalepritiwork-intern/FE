@@ -5,8 +5,11 @@ import { auth } from "./firebase";
 import HomePage from "./pages/HomePage";
 import lightLogo from "./assets/logo-light.png";
 import darkLogo from "./assets/logo-dark.png";
-import './index.css';
+import "./index.css";
 import AuthPage from "./components/AuthPage";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -62,6 +65,9 @@ function App() {
       <div className="container mt-4">
         {user ? <HomePage /> : <AuthPage />}
       </div>
+
+    
+      <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
 }

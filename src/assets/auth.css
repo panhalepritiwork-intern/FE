@@ -11,7 +11,7 @@
     border-radius: 12px;
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     padding: 40px;
-    width: 380px;
+    width: 420px;
     transition: background 0.3s ease, color 0.3s ease;
 }
 
@@ -51,19 +51,22 @@
 
 .auth-tabs {
     display: flex;
-    justify-content: space-around;
+    justify-content: center;
+    gap: 12px;
     margin-bottom: 20px;
 }
 
 .auth-tabs button {
     flex: 1;
-    padding: 12px;
+    padding: 12px 18px;
     font-weight: bold;
     border: none;
     cursor: pointer;
     background: #f0f0f0;
     transition: all 0.3s ease;
     border-radius: 6px;
+    min-width: 110px;
+    text-align: center;
 }
 
 .auth-tabs button.active {

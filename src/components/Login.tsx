@@ -1,25 +1,26 @@
 import { useState } from "react";
 import { auth } from "../firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      if (!userCredential.user.emailVerified) {
-        alert("Please verify your email before logging in.");
-        return;
-      }
-      console.log("Logged in:", userCredential.user);
-      alert("Login successful!");
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed. Check your email and password.");
-    }
+
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        if (userCredential.user.emailVerified) {
+          toast.success("Login successful!");
+        } else {
+          toast.info("Please verify your email before logging in.");
+        }
+      })
+      .catch((err) => {
+        toast.error("Login failed: " + err.message);
+      });
   };
 
   return (
