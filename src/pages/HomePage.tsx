@@ -9,9 +9,20 @@ const HomePage: React.FC = () => {
   const [newTask, setNewTask] = useState("");
   const [newDesc, setNewDesc] = useState(""); 
   const [filter, setFilter] = useState<"all" | "pending" | "in-progress" | "completed">("all");
+  const [role, setRole] = useState<string>("user"); 
 
   useEffect(() => {
     fetchTasks();
+
+
+    auth.currentUser?.getIdTokenResult(true).then((idTokenResult) => {
+      setRole(idTokenResult.claims.role || "user");
+    });
+
+    
+    auth.currentUser?.getIdToken(true).then((token) => {
+      console.log("Firebase ID Token:", token);
+    });
   }, []);
 
   const fetchTasks = async () => {
@@ -70,6 +81,11 @@ const HomePage: React.FC = () => {
     <div className="container py-4">
       
       <h1 className="task-title text-center mb-4">Track Your Progress</h1>
+
+      
+      <p className="text-center fw-bold mb-3">
+        Logged in as: <span className="text-primary">{role}</span>
+      </p>
 
       <form
         className="row g-2 justify-content-center mb-4"

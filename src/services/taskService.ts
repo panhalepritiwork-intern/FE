@@ -38,3 +38,5 @@ export const updateTask = async (
 export const deleteTask = async (id: string, token: string): Promise<void> => {
   await axios.delete(`${API_URL}/${id}`, getAuthHeaders(token));
 };
+
+
