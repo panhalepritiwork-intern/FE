@@ -14,11 +14,20 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [user, setUser] = useState<User | null>(null);
+  const [role, setRole] = useState<string>("user"); 
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
+
+      if (currentUser) {
+        const idTokenResult = await currentUser.getIdTokenResult(true);
+        setRole(idTokenResult.claims.role || "user");
+      } else {
+        setRole("user");
+      }
     });
+
     return () => unsubscribe();
   }, []);
 
@@ -63,10 +72,10 @@ function App() {
       </nav>
 
       <div className="container mt-4">
-        {user ? <HomePage /> : <AuthPage />}
+        
+        {user ? <HomePage role={role} /> : <AuthPage />}
       </div>
 
-    
       <ToastContainer position="top-center" autoClose={3000} />
     </div>
   );
