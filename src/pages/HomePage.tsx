@@ -13,17 +13,32 @@ const HomePage: React.FC = () => {
 
   useEffect(() => {
     fetchTasks();
-
-
-    auth.currentUser?.getIdTokenResult(true).then((idTokenResult) => {
-      setRole(idTokenResult.claims.role || "user");
-    });
-
-    
-    auth.currentUser?.getIdToken(true).then((token) => {
-      console.log("Firebase ID Token:", token);
-    });
+    fetchUserRole(); 
   }, []);
+
+  const fetchUserRole = async () => {
+    try {
+      const token = await auth.currentUser?.getIdToken();
+      const uid = auth.currentUser?.uid;   
+      if (!token || !uid) return;
+
+      const res = await fetch(`http://localhost:5000/api/users/by-uid/${uid}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        console.log("Fetched role:", data.role); 
+        setRole(data.role || "user");
+      } else {
+        console.warn("Could not fetch role, defaulting to user");
+        setRole("user");
+      }
+    } catch (err) {
+      console.error("Error fetching user role:", err);
+      setRole("user");
+    }
+  };
 
   const fetchTasks = async () => {
     try {
@@ -79,10 +94,8 @@ const HomePage: React.FC = () => {
 
   return (
     <div className="container py-4">
-      
       <h1 className="task-title text-center mb-4">Track Your Progress</h1>
 
-      
       <p className="text-center fw-bold mb-3">
         Logged in as: <span className="text-primary">{role}</span>
       </p>
