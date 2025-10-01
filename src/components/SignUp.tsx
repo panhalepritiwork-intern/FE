@@ -5,29 +5,36 @@ import {
   sendEmailVerification,
 } from "firebase/auth";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 const SignUp = () => {
   const [name, setName] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSignUp = (e: React.FormEvent) => {
+  const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        toast.success("Account created for " + name);
-        sendEmailVerification(userCredential.user)
-          .then(() => {
-            toast.info("Verification email sent to " + email);
-          })
-          .catch((err) => {
-            toast.error("Error sending email: " + err.message);
-          });
-      })
-      .catch((err) => {
-        toast.error("Sign up failed: " + err.message);
-      });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      toast.success("Account created for " + name);
+
+      await sendEmailVerification(userCredential.user);
+      toast.info("Verification email sent to " + email);
+
+      const token = await userCredential.user.getIdToken();
+
+      await axios.post(
+        "http://localhost:5000/api/users/signup-store",
+        { name, email },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      toast.success("User stored in database");
+    } catch (err: any) {
+      console.error("Sign up error:", err);
+      toast.error("Sign up failed: " + err.message);
+    }
   };
 
   return (

@@ -14,15 +14,41 @@ import "react-toastify/dist/ReactToastify.css";
 function App() {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<string>("user"); 
+  const [role, setRole] = useState<string>("user");
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
 
       if (currentUser) {
-        const idTokenResult = await currentUser.getIdTokenResult(true);
-        setRole(idTokenResult.claims.role || "user");
+        try {
+          const token = await currentUser.getIdToken();
+          const uid = currentUser.uid; 
+
+          console.log("Firebase ID Token:", token);
+          console.log("Firebase UID:", uid);
+
+          const res = await fetch(
+            `http://localhost:5000/api/users/by-uid/${uid}`, 
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+
+          if (res.ok) {
+            const data = await res.json();
+            console.log("Fetched role:", data.role);
+            setRole(data.role || "user");
+          } else {
+            console.warn("Could not fetch role, defaulting to user");
+            setRole("user");
+          }
+        } catch (err) {
+          console.error("Error fetching user role:", err);
+          setRole("user");
+        }
       } else {
         setRole("user");
       }
@@ -72,7 +98,6 @@ function App() {
       </nav>
 
       <div className="container mt-4">
-        
         {user ? <HomePage role={role} /> : <AuthPage />}
       </div>
 
